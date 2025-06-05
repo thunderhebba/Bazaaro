@@ -38,10 +38,11 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #777;
         }
-        /* Style for the cart modal overlay */
+        /* Style for the modal overlays */
         .cart-modal-overlay, .product-detail-modal-overlay, .whatsapp-info-modal-overlay {
             background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
         }
+        /* Style for the modal content to allow scrolling */
         .cart-modal-content, .product-detail-modal-content, .whatsapp-info-modal-content {
             max-height: 90vh; /* Limit modal height */
             overflow-y: auto; /* Enable scrolling for long modals */
@@ -77,6 +78,19 @@
         <!-- Products Section -->
         <section id="products-section" class="mb-12">
             <h2 class="text-4xl font-bold text-gray-900 mb-8 text-center border-b-4 border-blue-600 pb-3">اكتشف منتجاتنا</h2>
+            
+            <!-- Category Filter Buttons -->
+            <section id="categories-filter" class="mb-10">
+                <h3 class="text-3xl font-bold text-gray-800 mb-6 text-center">تصفح حسب الأقسام</h3>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button class="category-btn bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition duration-300" data-category="الكل">الكل</button>
+                    <button class="category-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-8 rounded-full transition duration-300" data-category="إلكترونيات">إلكترونيات</button>
+                    <button class="category-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-8 rounded-full transition duration-300" data-category="عبايات">عبايات</button>
+                    <button class="category-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-8 rounded-full transition duration-300" data-category="اكسسوارات">اكسسوارات</button>
+                    <button class="category-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-8 rounded-full transition duration-300" data-category="ملابس">ملابس</button>
+                </div>
+            </section>
+
             <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 <!-- Products will be loaded here by JavaScript -->
             </div>
@@ -222,7 +236,8 @@
                 price: 5999.99,
                 image: 'https://images.samsung.com/is/image/samsung/p6pim/levant/2302/gallery/levant-galaxy-s23-s918-sm-s918bzggmea-535359702?$472_472_AC_RGB$',
                 description: 'هاتف ذكي متطور بتصميم أنيق وميزات خارقة وأداء لا مثيل له. مزود بأحدث التقنيات لضمان تجربة مستخدم سلسة وفعالة. بطارية تدوم طويلاً وشاشة عرض عالية الدقة لمتعة لا مثيل لها.',
-                type: 'electronic' // لا يوجد مقاسات للمنتجات الإلكترونية
+                category: 'إلكترونيات',
+                type: 'electronic'
             },
             {
                 id: 2,
@@ -230,6 +245,7 @@
                 price: 499.50,
                 image: 'https://placehold.co/400x300/065f46/ffffff?text=سماعات',
                 description: 'تجربة صوت غامرة مع راحة لاسلكية وبطارية تدوم طويلاً. صوت نقي وعميق، وملاءمة مثالية للاستخدام اليومي وأثناء ممارسة الرياضة.',
+                category: 'إلكترونيات',
                 type: 'electronic'
             },
             {
@@ -237,7 +253,8 @@
                 name: 'ساعة ذكية رياضية أنيقة',
                 price: 1200.00,
                 image: 'https://placehold.co/400x300/9a3412/ffffff?text=ساعة+ذكية',
-                description: 'تتبع نشاطك البدني، تلقي الإشعارات، وتصميم يواكب الموضة. مقاومة للماء مع العديد من أوضاع الت تمارين ومراقبة الصحة.',
+                description: 'تتبع نشاطك البدني، تلقي الإشعارات، وتصميم يواكب الموضة. مقاومة للماء مع العديد من أوضاع التمارين ومراقبة الصحة.',
+                category: 'إلكترونيات',
                 type: 'electronic'
             },
             {
@@ -246,6 +263,7 @@
                 price: 2500.75,
                 image: 'https://placehold.co/400x300/6b21a8/ffffff?text=جهاز+لوحي',
                 description: 'مثالي للدراسة، العمل، والترفيه في أي مكان بفضل خفته وشاشته الكبيرة عالية الدقة. أداء سريع يلبي جميع احتياجاتك.',
+                category: 'إلكترونيات',
                 type: 'electronic'
             },
             {
@@ -254,6 +272,7 @@
                 price: 3500.00,
                 image: 'https://placehold.co/400x300/be123c/ffffff?text=كاميرا',
                 description: 'التقط لحظاتك بدقة مذهلة وجودة فيديو احترافية. ميزات متقدمة للتحكم اليدوي والتركيز التلقائي السريع.',
+                category: 'إلكترونيات',
                 type: 'electronic'
             },
             {
@@ -262,25 +281,46 @@
                 price: 150.00,
                 image: 'https://placehold.co/400x300/0f766e/ffffff?text=شاحن',
                 description: 'لا تقلق بشأن نفاد البطارية، شاحن قوي وسريع في جيبك. متوافق مع معظم الأجهزة ويوفر شحنًا سريعًا.',
+                category: 'إلكترونيات',
                 type: 'electronic'
             },
             {
                 id: 7,
                 name: 'عبايا أنيقة (ألوان متعددة)',
                 price: 149.50,
-                image: 'https://cdn.salla.sa/RAYNOz/61f83bca-d1c7-4236-9490-bbfe9b66e124-750x1000-Jr0A9F3z5cVpdvr3pGtqrKH07VuvgJ5r7v6WzqJ4.jpg', // يمكنك استبدال هذا برابط صورة لعبايا
+                image: 'https://cdn.salla.sa/RAYNOz/61f83bca-d1c7-4236-9490-bbfe9b66e124-750x1000-Jr0A9F3z5cVpdvr3pGtqrKH07VuvgJ5r7v6WzqJ4.jpg',
                 description: 'عباية بتصميم عصري وألوان جذابة، مصنوعة من قماش عالي الجودة لراحة وأناقة لا مثيل لها. مثالية للمناسبات المختلفة والاستخدام اليومي.',
-                type: 'clothing', // هذا المنتج من نوع "ملابس" لذلك سيحتوي على مقاسات
-                sizes: ['S', 'M', 'L', 'XL', 'XXL'] // المقاسات المتاحة لهذا المنتج
+                category: 'عبايات',
+                type: 'clothing',
+                sizes: ['S', 'M', 'L', 'XL', 'XXL']
             },
             {
                 id: 8,
                 name: 'بنطلون جينز كلاسيك (قصة مريحة)',
                 price: 250.00,
-                image: 'https://placehold.co/400x300/4c4c4c/ffffff?text=جينز', // يمكنك استبدال هذا برابط صورة لبنطلون جينز
+                image: 'https://placehold.co/400x300/4c4c4c/ffffff?text=جينز',
                 description: 'بنطلون جينز كلاسيكي بتصميم يناسب جميع الأذواق، مريح وعملي. مصنوع من قماش دنيم عالي الجودة لمتانة تدوم طويلاً.',
+                category: 'ملابس',
                 type: 'clothing',
                 sizes: ['28', '30', '32', '34', '36', '38']
+            },
+            {
+                id: 9,
+                name: 'سلسال فضة تصميم فريد',
+                price: 99.00,
+                image: 'https://placehold.co/400x300/a832a8/ffffff?text=سلسال',
+                description: 'سلسال فضة عيار 925 بتصميم فريد يضيف لمسة أناقة إلى مظهرك. مثالي كهدية أو لإضفاء لمسة شخصية على إطلالتك اليومية.',
+                category: 'اكسسوارات',
+                type: 'jewelry'
+            },
+            {
+                id: 10,
+                name: 'حقيبة يد جلدية نسائية',
+                price: 350.00,
+                image: 'https://placehold.co/400x300/7a2a8c/ffffff?text=حقيبة',
+                description: 'حقيبة يد نسائية أنيقة وعملية مصنوعة من الجلد الطبيعي الفاخر. تصميم واسع يتسع لجميع مستلزماتك اليومية.',
+                category: 'اكسسوارات',
+                type: 'bag'
             }
         ];
 
@@ -324,12 +364,22 @@
         const customerStreetInput = document.getElementById('customer-street');
 
 
-        // --- 3. وظائف عرض المنتجات وسلة التسوق ---
+        // --- 3. وظائف عرض المنتجات وتصفيتها وسلة التسوق ---
 
-        // وظيفة لعرض المنتجات
-        function displayProducts() {
+        // وظيفة لعرض المنتجات بناءً على الفئة المختارة
+        function displayProducts(filterCategory = 'الكل') {
             productsContainer.innerHTML = ''; // تفريغ المنتجات الحالية
-            products.forEach(product => {
+            
+            // تصفية المنتجات حسب الفئة
+            const filteredProducts = products.filter(product => {
+                return filterCategory === 'الكل' || product.category === filterCategory;
+            });
+
+            if (filteredProducts.length === 0) {
+                productsContainer.innerHTML = `<p class="text-gray-600 text-center text-xl col-span-full py-8">لا توجد منتجات في هذا القسم حالياً.</p>`;
+            }
+
+            filteredProducts.forEach(product => {
                 const productCard = `
                     <div class="product-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                         <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
@@ -348,6 +398,18 @@
                 productsContainer.innerHTML += productCard;
             });
             setupViewDetailsButtons(); // قم بإعداد الأزرار بعد عرض المنتجات
+
+            // تحديث تصميم زر الفئة النشطة
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            categoryButtons.forEach(btn => {
+                if (btn.dataset.category === filterCategory) {
+                    btn.classList.remove('bg-gray-200', 'text-gray-800', 'hover:bg-gray-300');
+                    btn.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700');
+                } else {
+                    btn.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-700');
+                    btn.classList.add('bg-gray-200', 'text-gray-800', 'hover:bg-gray-300');
+                }
+            });
         }
 
         // وظيفة لإعداد مستمعي الأحداث لأزرار "عرض التفاصيل"
@@ -588,7 +650,16 @@
 
         // --- 6. تشغيل التطبيق عند تحميل الصفحة ---
         document.addEventListener('DOMContentLoaded', () => {
-            displayProducts(); // عرض المنتجات عند تحميل الصفحة
+            // إعداد مستمعي الأحداث لأزرار الأقسام
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const selectedCategory = event.target.dataset.category;
+                    displayProducts(selectedCategory);
+                });
+            });
+
+            displayProducts('الكل'); // عرض جميع المنتجات عند تحميل الصفحة لأول مرة
             updateCartDisplay(); // تحديث عرض السلة (ستكون فارغة في البداية)
             placeOrderBtn.addEventListener('click', placeOrder); // ربط زر إتمام الطلب بالوظيفة
         });
