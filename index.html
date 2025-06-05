@@ -39,10 +39,10 @@
             background: #777;
         }
         /* Style for the cart modal overlay */
-        .cart-modal-overlay, .product-detail-modal-overlay {
+        .cart-modal-overlay, .product-detail-modal-overlay, .whatsapp-info-modal-overlay {
             background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
         }
-        .cart-modal-content, .product-detail-modal-content {
+        .cart-modal-content, .product-detail-modal-content, .whatsapp-info-modal-content {
             max-height: 90vh; /* Limit modal height */
             overflow-y: auto; /* Enable scrolling for long modals */
         }
@@ -126,26 +126,74 @@
                     <!-- Cart items will be loaded here by JavaScript -->
                     <p id="empty-cart-message" class="text-gray-600 text-center text-xl py-8">سلة التسوق فارغة، هيا بنا نضيف بعض المنتجات!</p>
                 </div>
-                <div class="flex justify-between items-center text-3xl font-bold text-gray-900 border-t-2 border-gray-200 pt-6">
+                
+                <!-- Customer Information Section -->
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">بيانات العميل والشحن</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label for="customer-name" class="block text-gray-700 text-sm font-semibold mb-2">الاسم الكامل:</label>
+                            <input type="text" id="customer-name" class="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500" placeholder="اسمك كاملاً" required>
+                        </div>
+                        <div>
+                            <label for="customer-phone" class="block text-gray-700 text-sm font-semibold mb-2">رقم الجوال:</label>
+                            <input type="tel" id="customer-phone" class="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500" placeholder="مثال: 9665xxxxxxxx" required>
+                        </div>
+                        <div>
+                            <label for="customer-city" class="block text-gray-700 text-sm font-semibold mb-2">المدينة:</label>
+                            <input type="text" id="customer-city" class="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500" placeholder="مثال: الرياض" required>
+                        </div>
+                        <div>
+                            <label for="customer-district" class="block text-gray-700 text-sm font-semibold mb-2">الحي:</label>
+                            <input type="text" id="customer-district" class="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500" placeholder="مثال: حي النرجس" required>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="customer-street" class="block text-gray-700 text-sm font-semibold mb-2">الشارع ورقم المبنى:</label>
+                            <input type="text" id="customer-street" class="w-full p-3 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500" placeholder="مثال: شارع الملك فهد، مبنى رقم 123" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center text-3xl font-bold text-gray-900 border-t-2 border-gray-200 pt-6 mt-6">
                     <span>الإجمالي:</span>
                     <span id="cart-total">0.00 ريال سعودي</span>
                 </div>
-                <button id="place-order-btn" class="mt-10 w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-4 px-8 rounded-xl text-2xl transition duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                <button id="place-order-btn" class="mt-10 w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-4 px-8 rounded-xl text-2xl transition duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
                     إتمام الطلب عبر واتساب
                 </button>
             </div>
         </div>
 
         <!-- WhatsApp Info Modal (Hidden by default) -->
-        <div id="whatsapp-info-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden">
-            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full relative">
-                <h3 class="text-3xl font-bold mb-5 text-center text-gray-800">أرقام للتواصل</h3>
-                <p class="text-gray-700 text-lg text-center mb-6">
+        <div id="whatsapp-info-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden whatsapp-info-modal-overlay">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full relative whatsapp-info-modal-content">
+                <h3 class="text-3xl font-bold mb-5 text-center text-gray-800">معلومات الشحن والتواصل</h3>
+                <p class="text-gray-700 text-lg text-center mb-4">
+                    **أرقام التواصل عبر واتساب:**
+                    <br>
                     للرقم المصري: <code class="bg-gray-200 p-1 rounded font-mono text-sm">201012213289</code>
                     <br>
                     للرقم السعودي: <code class="bg-gray-200 p-1 rounded font-mono text-sm">966501234567</code>
                 </p>
-                <div class="text-center">
+                <div class="border-t border-gray-200 pt-4 mt-4">
+                    <p class="text-gray-700 text-lg text-center mb-4 font-bold">الشحن والتوصيل (عبر سمسا SMSA)</p>
+                    <p class="text-gray-600 text-base mb-2">
+                        نقوم بالشحن لجميع مناطق المملكة العربية السعودية عبر شركة سمسا (SMSA).
+                        <br>
+                        **تكلفة الشحن:** [يرجى تحديد تكلفة الشحن الثابتة أو طريقة حسابها هنا]
+                        <br>
+                        **مدة التوصيل:** [يرجى تحديد المدة التقديرية هنا، مثال: 2-5 أيام عمل].
+                    </p>
+                    <p class="text-gray-700 text-lg text-center mb-4 font-bold">
+                        لإتمام طلبك عبر الواتساب، يرجى تزويدنا بالآتي:
+                    </p>
+                    <ul class="text-gray-600 text-base text-right list-disc pr-8 mb-4">
+                        <li>الاسم الكامل.</li>
+                        <li>العنوان التفصيلي (المدينة، الحي، الشارع، رقم المبنى).</li>
+                        <li>رقم الجوال.</li>
+                    </ul>
+                </div>
+                <div class="text-center mt-6">
                     <button id="close-whatsapp-info-modal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300">
                         فهمت
                     </button>
@@ -189,7 +237,7 @@
                 name: 'ساعة ذكية رياضية أنيقة',
                 price: 1200.00,
                 image: 'https://placehold.co/400x300/9a3412/ffffff?text=ساعة+ذكية',
-                description: 'تتبع نشاطك البدني، تلقي الإشعارات، وتصميم يواكب الموضة. مقاومة للماء مع العديد من أوضاع التمارين ومراقبة الصحة.',
+                description: 'تتبع نشاطك البدني، تلقي الإشعارات، وتصميم يواكب الموضة. مقاومة للماء مع العديد من أوضاع الت تمارين ومراقبة الصحة.',
                 type: 'electronic'
             },
             {
@@ -267,6 +315,14 @@
         const decreaseQuantityBtn = document.getElementById('decrease-quantity-btn');
         const increaseQuantityBtn = document.getElementById('increase-quantity-btn');
         const addToCartDetailBtn = document.getElementById('add-to-cart-detail-btn');
+
+        // عناصر حقول معلومات العميل
+        const customerNameInput = document.getElementById('customer-name');
+        const customerPhoneInput = document.getElementById('customer-phone');
+        const customerCityInput = document.getElementById('customer-city');
+        const customerDistrictInput = document.getElementById('customer-district');
+        const customerStreetInput = document.getElementById('customer-street');
+
 
         // --- 3. وظائف عرض المنتجات وسلة التسوق ---
 
@@ -437,8 +493,22 @@
 
         // --- 4. وظيفة إتمام الطلب عبر واتساب ---
         function placeOrder() {
+            // التحقق من أن السلة ليست فارغة
             if (cart.length === 0) {
-                alert("سلة التسوق فارغة، يرجى إضافة منتجات قبل إتمام الطلب."); // Use a custom modal in a real app
+                alert("سلة التسوق فارغة، يرجى إضافة منتجات قبل إتمام الطلب.");
+                return;
+            }
+
+            // جلب بيانات العميل من الحقول
+            const customerName = customerNameInput.value.trim();
+            const customerPhone = customerPhoneInput.value.trim();
+            const customerCity = customerCityInput.value.trim();
+            const customerDistrict = customerDistrictInput.value.trim();
+            const customerStreet = customerStreetInput.value.trim();
+
+            // التحقق من أن جميع حقول العميل ليست فارغة
+            if (!customerName || !customerPhone || !customerCity || !customerDistrict || !customerStreet) {
+                alert("الرجاء ملء جميع بيانات العميل والشحن لإتمام الطلب.");
                 return;
             }
 
@@ -452,7 +522,13 @@
             });
 
             orderDetails += `\nالإجمالي الكلي: ${total.toFixed(2)} ريال سعودي\n`;
-            orderDetails += "الرجاء تأكيد الطلب.";
+            orderDetails += "\n--- بيانات العميل والشحن ---";
+            orderDetails += `\nالاسم الكامل: ${customerName}`;
+            orderDetails += `\nرقم الجوال: ${customerPhone}`;
+            orderDetails += `\nالمدينة: ${customerCity}`;
+            orderDetails += `\nالحي: ${customerDistrict}`;
+            orderDetails += `\nالشارع ورقم المبنى: ${customerStreet}`;
+            orderDetails += "\n\nالرجاء تأكيد الطلب.";
 
             // ترميز الرسالة لعنوان URL
             const encodedMessage = encodeURIComponent(orderDetails);
