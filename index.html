@@ -39,12 +39,12 @@
             background: #777;
         }
         /* Style for the cart modal overlay */
-        .cart-modal-overlay {
+        .cart-modal-overlay, .product-detail-modal-overlay {
             background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
         }
-        .cart-modal-content {
+        .cart-modal-content, .product-detail-modal-content {
             max-height: 90vh; /* Limit modal height */
-            overflow-y: auto; /* Enable scrolling for long carts */
+            overflow-y: auto; /* Enable scrolling for long modals */
         }
     </style>
 </head>
@@ -81,6 +81,41 @@
                 <!-- Products will be loaded here by JavaScript -->
             </div>
         </section>
+
+        <!-- Product Detail Modal (Hidden by default, will open on product click) -->
+        <div id="product-detail-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden product-detail-modal-overlay">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-4xl w-full relative product-detail-modal-content flex flex-col md:flex-row gap-8">
+                <button id="close-product-detail-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-4xl font-light leading-none transition duration-300">&times;</button>
+                
+                <div class="md:w-1/2 flex justify-center items-center">
+                    <img id="detail-product-image" src="" alt="صورة المنتج" class="w-full h-auto max-h-96 object-contain rounded-lg border border-gray-200">
+                </div>
+                
+                <div class="md:w-1/2 flex flex-col">
+                    <h3 id="detail-product-name" class="text-4xl font-bold text-gray-900 mb-4"></h3>
+                    <p id="detail-product-description" class="text-gray-700 text-lg mb-6 leading-relaxed"></p>
+                    <span id="detail-product-price" class="text-4xl font-extrabold text-blue-700 mb-6"></span>
+
+                    <div id="detail-size-selection" class="mb-6 hidden">
+                        <label for="detail-product-size" class="block text-gray-800 text-lg font-semibold mb-2">اختر المقاس:</label>
+                        <select id="detail-product-size" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 text-gray-800 text-lg">
+                            <!-- Options will be populated by JS -->
+                        </select>
+                    </div>
+
+                    <div class="flex items-center mb-8">
+                        <label for="detail-product-quantity" class="text-gray-800 text-lg font-semibold mr-4">الكمية:</label>
+                        <button id="decrease-quantity-btn" class="bg-gray-200 text-gray-700 font-bold w-12 h-12 rounded-full flex items-center justify-center text-2xl hover:bg-gray-300 transition duration-200">-</button>
+                        <input type="number" id="detail-product-quantity" value="1" min="1" class="w-20 text-center mx-4 p-2 border border-gray-300 rounded-md shadow-sm text-2xl font-bold">
+                        <button id="increase-quantity-btn" class="bg-gray-200 text-gray-700 font-bold w-12 h-12 rounded-full flex items-center justify-center text-2xl hover:bg-gray-300 transition duration-200">+</button>
+                    </div>
+
+                    <button id="add-to-cart-detail-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded-xl text-2xl transition duration-300 transform hover:scale-105">
+                        أضف إلى السلة
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <!-- Cart Modal (Hidden by default, will open on button click) -->
         <div id="cart-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden cart-modal-overlay">
@@ -138,7 +173,7 @@
                 name: 'هاتف ذكي X (أحدث إصدار)',
                 price: 5999.99,
                 image: 'https://images.samsung.com/is/image/samsung/p6pim/levant/2302/gallery/levant-galaxy-s23-s918-sm-s918bzggmea-535359702?$472_472_AC_RGB$',
-                description: 'هاتف ذكي متطور بتصميم أنيق وميزات خارقة وأداء لا مثيل له.',
+                description: 'هاتف ذكي متطور بتصميم أنيق وميزات خارقة وأداء لا مثيل له. مزود بأحدث التقنيات لضمان تجربة مستخدم سلسة وفعالة. بطارية تدوم طويلاً وشاشة عرض عالية الدقة لمتعة لا مثيل لها.',
                 type: 'electronic' // لا يوجد مقاسات للمنتجات الإلكترونية
             },
             {
@@ -146,7 +181,7 @@
                 name: 'سماعات بلوتوث لاسلكية',
                 price: 499.50,
                 image: 'https://placehold.co/400x300/065f46/ffffff?text=سماعات',
-                description: 'تجربة صوت غامرة مع راحة لاسلكية وبطارية تدوم طويلاً.',
+                description: 'تجربة صوت غامرة مع راحة لاسلكية وبطارية تدوم طويلاً. صوت نقي وعميق، وملاءمة مثالية للاستخدام اليومي وأثناء ممارسة الرياضة.',
                 type: 'electronic'
             },
             {
@@ -154,7 +189,7 @@
                 name: 'ساعة ذكية رياضية أنيقة',
                 price: 1200.00,
                 image: 'https://placehold.co/400x300/9a3412/ffffff?text=ساعة+ذكية',
-                description: 'تتبع نشاطك البدني، تلقي الإشعارات، وتصميم يواكب الموضة.',
+                description: 'تتبع نشاطك البدني، تلقي الإشعارات، وتصميم يواكب الموضة. مقاومة للماء مع العديد من أوضاع التمارين ومراقبة الصحة.',
                 type: 'electronic'
             },
             {
@@ -162,7 +197,7 @@
                 name: 'جهاز لوحي فائق النحافة',
                 price: 2500.75,
                 image: 'https://placehold.co/400x300/6b21a8/ffffff?text=جهاز+لوحي',
-                description: 'مثالي للدراسة، العمل، والترفيه في أي مكان بفضل خفته.',
+                description: 'مثالي للدراسة، العمل، والترفيه في أي مكان بفضل خفته وشاشته الكبيرة عالية الدقة. أداء سريع يلبي جميع احتياجاتك.',
                 type: 'electronic'
             },
             {
@@ -170,7 +205,7 @@
                 name: 'كاميرا رقمية احترافية 4K',
                 price: 3500.00,
                 image: 'https://placehold.co/400x300/be123c/ffffff?text=كاميرا',
-                description: 'التقط لحظاتك بدقة مذهلة وجودة فيديو احترافية.',
+                description: 'التقط لحظاتك بدقة مذهلة وجودة فيديو احترافية. ميزات متقدمة للتحكم اليدوي والتركيز التلقائي السريع.',
                 type: 'electronic'
             },
             {
@@ -178,24 +213,24 @@
                 name: 'شاحن محمول فائق السرعة',
                 price: 150.00,
                 image: 'https://placehold.co/400x300/0f766e/ffffff?text=شاحن',
-                description: 'لا تقلق بشأن نفاد البطارية، شاحن قوي وسريع في جيبك.',
+                description: 'لا تقلق بشأن نفاد البطارية، شاحن قوي وسريع في جيبك. متوافق مع معظم الأجهزة ويوفر شحنًا سريعًا.',
                 type: 'electronic'
             },
             {
                 id: 7,
-                name: 'عبايا',
+                name: 'عبايا أنيقة (ألوان متعددة)',
                 price: 149.50,
-                image: 'https://cdn.salla.sa/RAYNOz/61f83bca-d1c7-4236-9490-bbfe9b66e124-750x1000-Jr0A9F3z5cVpdvr3pGtqrKH07VuvgJ5r7v6WzqJ4.jpg', // يمكنك استبدال هذا برابط صورة لتيشيرت
-                description: 'تيشيرت مريح وعصري مصنوع من القطن الفاخر، متوفر بألوان جذابة.',
+                image: 'https://cdn.salla.sa/RAYNOz/61f83bca-d1c7-4236-9490-bbfe9b66e124-750x1000-Jr0A9F3z5cVpdvr3pGtqrKH07VuvgJ5r7v6WzqJ4.jpg', // يمكنك استبدال هذا برابط صورة لعبايا
+                description: 'عباية بتصميم عصري وألوان جذابة، مصنوعة من قماش عالي الجودة لراحة وأناقة لا مثيل لها. مثالية للمناسبات المختلفة والاستخدام اليومي.',
                 type: 'clothing', // هذا المنتج من نوع "ملابس" لذلك سيحتوي على مقاسات
                 sizes: ['S', 'M', 'L', 'XL', 'XXL'] // المقاسات المتاحة لهذا المنتج
             },
             {
                 id: 8,
-                name: 'بنطلون جينز كلاسيك',
+                name: 'بنطلون جينز كلاسيك (قصة مريحة)',
                 price: 250.00,
                 image: 'https://placehold.co/400x300/4c4c4c/ffffff?text=جينز', // يمكنك استبدال هذا برابط صورة لبنطلون جينز
-                description: 'بنطلون جينز كلاسيكي بتصميم يناسب جميع الأذواق، مريح وعملي.',
+                description: 'بنطلون جينز كلاسيكي بتصميم يناسب جميع الأذواق، مريح وعملي. مصنوع من قماش دنيم عالي الجودة لمتانة تدوم طويلاً.',
                 type: 'clothing',
                 sizes: ['28', '30', '32', '34', '36', '38']
             }
@@ -203,6 +238,7 @@
 
         // سلة التسوق (لا تعدلها هنا، سيتم إدارتها بواسطة الكود)
         let cart = [];
+        let currentProductInDetailModal = null; // لتخزين المنتج الحالي المعروض في نافذة التفاصيل
 
         // --- 2. جلب عناصر HTML ---
         const productsContainer = document.getElementById('products-container');
@@ -213,11 +249,24 @@
         const whatsappInfoBtn = document.getElementById('whatsapp-info-btn');
         const whatsappInfoModal = document.getElementById('whatsapp-info-modal');
         const closeWhatsappInfoModalBtn = document.getElementById('close-whatsapp-info-modal');
-        // عناصر جديدة لسلة المشتريات المنبثقة
+        // عناصر سلة المشتريات المنبثقة
         const cartIconContainer = document.getElementById('cart-icon-container');
         const cartItemCountSpan = document.getElementById('cart-item-count');
         const cartModal = document.getElementById('cart-modal');
         const closeCartModalBtn = document.getElementById('close-cart-modal');
+        // عناصر نافذة تفاصيل المنتج المنبثقة
+        const productDetailModal = document.getElementById('product-detail-modal');
+        const closeProductDetailModalBtn = document.getElementById('close-product-detail-modal');
+        const detailProductImage = document.getElementById('detail-product-image');
+        const detailProductName = document.getElementById('detail-product-name');
+        const detailProductDescription = document.getElementById('detail-product-description');
+        const detailProductPrice = document.getElementById('detail-product-price');
+        const detailSizeSelectionDiv = document.getElementById('detail-size-selection');
+        const detailProductSizeSelect = document.getElementById('detail-product-size');
+        const detailProductQuantityInput = document.getElementById('detail-product-quantity');
+        const decreaseQuantityBtn = document.getElementById('decrease-quantity-btn');
+        const increaseQuantityBtn = document.getElementById('increase-quantity-btn');
+        const addToCartDetailBtn = document.getElementById('add-to-cart-detail-btn');
 
         // --- 3. وظائف عرض المنتجات وسلة التسوق ---
 
@@ -225,30 +274,16 @@
         function displayProducts() {
             productsContainer.innerHTML = ''; // تفريغ المنتجات الحالية
             products.forEach(product => {
-                let sizeSelectionHtml = '';
-                // إذا كان المنتج من نوع "ملابس"، أضف قائمة اختيار المقاسات
-                if (product.type === 'clothing' && product.sizes && product.sizes.length > 0) {
-                    sizeSelectionHtml = `
-                        <div class="mb-4">
-                            <label for="size-${product.id}" class="block text-gray-700 text-sm font-medium mb-1">اختر المقاس:</label>
-                            <select id="size-${product.id}" class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-800">
-                                ${product.sizes.map(size => `<option value="${size}">${size}</option>`).join('')}
-                            </select>
-                        </div>
-                    `;
-                }
-
                 const productCard = `
                     <div class="product-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                         <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-xl font-bold text-gray-800 mb-2">${product.name}</h3>
-                            <p class="text-gray-600 mb-4 text-sm">${product.description}</p>
-                            ${sizeSelectionHtml}
+                            <p class="text-gray-600 mb-4 text-sm overflow-hidden text-ellipsis whitespace-nowrap">${product.description}</p>
                             <div class="flex justify-between items-center">
                                 <span class="text-2xl font-bold text-blue-600">${product.price.toFixed(2)} ريال سعودي</span>
-                                <button data-product-id="${product.id}" class="add-to-cart-btn bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 transform hover:scale-105">
-                                    أضف للسلة
+                                <button data-product-id="${product.id}" class="view-details-btn bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 transform hover:scale-105">
+                                    عرض التفاصيل
                                 </button>
                             </div>
                         </div>
@@ -256,29 +291,76 @@
                 `;
                 productsContainer.innerHTML += productCard;
             });
-            setupAddToCartButtons(); // قم بإعداد الأزرار بعد عرض المنتجات
+            setupViewDetailsButtons(); // قم بإعداد الأزرار بعد عرض المنتجات
         }
 
-        // وظيفة لإعداد مستمعي الأحداث لأزرار "أضف للسلة"
-        function setupAddToCartButtons() {
-            const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
-            addToCartButtons.forEach(button => {
+        // وظيفة لإعداد مستمعي الأحداث لأزرار "عرض التفاصيل"
+        function setupViewDetailsButtons() {
+            const viewDetailsButtons = document.querySelectorAll('.view-details-btn');
+            viewDetailsButtons.forEach(button => {
                 button.addEventListener('click', (event) => {
                     const productId = parseInt(event.target.dataset.productId);
-                    let selectedSize = null;
-                    const productCard = event.target.closest('.product-card');
-                    const sizeSelect = productCard.querySelector(`#size-${productId}`);
-
-                    if (sizeSelect) {
-                        selectedSize = sizeSelect.value;
-                    }
-                    addToCart(productId, selectedSize);
+                    showProductDetails(productId);
                 });
             });
         }
 
+        // وظيفة لعرض نافذة تفاصيل المنتج المنبثقة
+        function showProductDetails(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            currentProductInDetailModal = product; // حفظ المنتج الحالي
+
+            detailProductImage.src = product.image;
+            detailProductImage.alt = product.name;
+            detailProductName.textContent = product.name;
+            detailProductDescription.textContent = product.description;
+            detailProductPrice.textContent = `${product.price.toFixed(2)} ريال سعودي`;
+            detailProductQuantityInput.value = 1; // إعادة تعيين الكمية إلى 1 عند فتح النافذة
+
+            // إعداد المقاسات
+            if (product.type === 'clothing' && product.sizes && product.sizes.length > 0) {
+                detailSizeSelectionDiv.classList.remove('hidden');
+                detailProductSizeSelect.innerHTML = product.sizes.map(size => `<option value="${size}">${size}</option>`).join('');
+            } else {
+                detailSizeSelectionDiv.classList.add('hidden');
+                detailProductSizeSelect.innerHTML = ''; // مسح الخيارات إذا لم تكن ملابس
+            }
+
+            // إعداد زر الإضافة للسلة في صفحة التفاصيل
+            addToCartDetailBtn.onclick = () => {
+                const quantity = parseInt(detailProductQuantityInput.value);
+                const size = product.type === 'clothing' ? detailProductSizeSelect.value : null;
+                addToCart(product.id, size, quantity);
+                closeProductDetailModal(); // إغلاق النافذة بعد الإضافة للسلة
+            };
+
+            productDetailModal.classList.remove('hidden');
+        }
+
+        // وظيفة لإغلاق نافذة تفاصيل المنتج
+        function closeProductDetailModal() {
+            productDetailModal.classList.add('hidden');
+            currentProductInDetailModal = null; // مسح المنتج الحالي
+        }
+
+        // مستمعي أحداث لزيادة وتقليل الكمية في صفحة تفاصيل المنتج
+        decreaseQuantityBtn.addEventListener('click', () => {
+            let quantity = parseInt(detailProductQuantityInput.value);
+            if (quantity > 1) {
+                detailProductQuantityInput.value = quantity - 1;
+            }
+        });
+
+        increaseQuantityBtn.addEventListener('click', () => {
+            let quantity = parseInt(detailProductQuantityInput.value);
+            detailProductQuantityInput.value = quantity + 1;
+        });
+
+
         // وظيفة لإضافة منتج إلى السلة
-        function addToCart(productId, selectedSize = null) {
+        function addToCart(productId, selectedSize = null, quantity = 1) { // إضافة الكمية كمعامل
             const product = products.find(p => p.id === productId);
             if (product) {
                 // البحث عن المنتج في السلة بناءً على ID والمقاس (إذا كان موجوداً)
@@ -288,15 +370,15 @@
                 );
 
                 if (existingCartItem) {
-                    existingCartItem.quantity++;
+                    existingCartItem.quantity += quantity; // إضافة الكمية المحددة
                 } else {
-                    cart.push({ ...product, quantity: 1, selectedSize: selectedSize });
+                    cart.push({ ...product, quantity: quantity, selectedSize: selectedSize }); // إضافة المنتج بالكمية المحددة
                 }
                 updateCartDisplay();
             }
         }
 
-        // وظيفة لتغيير كمية منتج في السلة
+        // وظيفة لتغيير كمية منتج في السلة (من داخل سلة المشتريات)
         function changeQuantity(productId, selectedSize, change) {
             const itemIndex = cart.findIndex(item => 
                 item.id === productId && 
@@ -401,6 +483,14 @@
         cartModal.addEventListener('click', (event) => {
             if (event.target === cartModal) { // إغلاق المودال عند النقر على الخلفية فقط
                 closeCartModal();
+            }
+        });
+
+        // مستمع أحداث لإغلاق نافذة تفاصيل المنتج
+        closeProductDetailModalBtn.addEventListener('click', closeProductDetailModal);
+        productDetailModal.addEventListener('click', (event) => {
+            if (event.target === productDetailModal) { // إغلاق المودال عند النقر على الخلفية فقط
+                closeProductDetailModal();
             }
         });
 
