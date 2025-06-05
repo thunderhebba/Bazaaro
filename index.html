@@ -54,7 +54,7 @@
             <!-- Website Logo -->
             <div class="flex items-center mb-4 md:mb-0">
                 <!-- هذا هو المكان الذي يمكنك فيه تغيير رابط صورة الشعار -->
-                <img src="https://i.postimg.cc/ncZNRTWQ/f59c2807-52d5-4d87-ba95-ef3a5c039195.png" alt="شعار المتجر" class="h-20 w-20 rounded-full mr-4 shadow-md border-2 border-white">
+                <img src="https://placehold.co/80x80/6b21a8/ffffff?text=LOGO" alt="شعار المتجر" class="h-20 w-20 rounded-full mr-4 shadow-md border-2 border-white">
                 <!-- تم حذف كلمة "Bazaaro" من هنا -->
             </div>
             <nav class="flex items-center space-x-6 space-x-reverse">
@@ -327,6 +327,9 @@
                     total += item.price * item.quantity;
                     totalItemsInCart += item.quantity;
                     const sizeText = item.selectedSize ? `<span class="text-sm text-gray-500 mr-2">(مقاس: ${item.selectedSize})</span>` : '';
+                    // تم تعديل هذا السطر لضمان تمرير قيمة null بشكل صحيح
+                    const sizeParam = item.selectedSize === null ? 'null' : `'${item.selectedSize.replace(/'/g, "\\'")}'`;
+
                     const cartItemDiv = `
                         <div class="flex items-center justify-between p-4 border-b last:border-b-0">
                             <div class="flex items-center">
@@ -337,9 +340,9 @@
                                 </div>
                             </div>
                             <div class="flex items-center space-x-3 space-x-reverse">
-                                <button onclick="changeQuantity(${item.id}, '${item.selectedSize}', -1)" class="bg-red-200 text-red-700 font-bold w-10 h-10 rounded-full flex items-center justify-center text-xl hover:bg-red-300 transition duration-200">-</button>
+                                <button onclick="changeQuantity(${item.id}, ${sizeParam}, -1)" class="bg-red-200 text-red-700 font-bold w-10 h-10 rounded-full flex items-center justify-center text-xl hover:bg-red-300 transition duration-200">-</button>
                                 <span class="text-2xl font-medium text-gray-900">${item.quantity}</span>
-                                <button onclick="changeQuantity(${item.id}, '${item.selectedSize}', 1)" class="bg-green-200 text-green-700 font-bold w-10 h-10 rounded-full flex items-center justify-center text-xl hover:bg-green-300 transition duration-200">+</button>
+                                <button onclick="changeQuantity(${item.id}, ${sizeParam}, 1)" class="bg-green-200 text-green-700 font-bold w-10 h-10 rounded-full flex items-center justify-center text-xl hover:bg-green-300 transition duration-200">+</button>
                             </div>
                         </div>
                     `;
