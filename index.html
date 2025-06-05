@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bazaaro</title>
+    <title>bazaaro</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -39,7 +39,11 @@
 <body class="bg-gray-100 flex flex-col min-h-screen">
     <header class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 shadow-lg">
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
-            <h1 class="text-4xl font-extrabold mb-4 md:mb-0">متجر المنتجات</h1>
+            <!-- Website Logo -->
+            <div class="flex items-center mb-4 md:mb-0">
+                <img src="https://placehold.co/80x80/ffffff/000000?text=LOGO" alt="متجرنا" class="h-20 w-20 rounded-full mr-4 shadow-md">
+                <h1 class="text-4xl font-extrabold">متجر المنتجات</h1>
+            </div>
             <nav>
                 <ul class="flex space-x-6 space-x-reverse text-lg font-medium">
                     <li><a href="#products-section" class="hover:text-blue-200 transition duration-300">المنتجات</a></li>
@@ -69,7 +73,7 @@
                 </div>
                 <div class="flex justify-between items-center text-2xl font-bold text-gray-900 border-t pt-4">
                     <span>الإجمالي:</span>
-                    <span id="cart-total">0.00 جنيه مصري</span>
+                    <span id="cart-total">0.00 ريال سعودي</span>
                 </div>
                 <button id="place-order-btn" class="mt-8 w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg text-xl transition duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                     إتمام الطلب عبر واتساب
@@ -103,23 +107,23 @@
         // --- 1. إعدادات المتجر (يمكنك تعديلها هنا) ---
 
         // رقم الواتساب الذي ستصله الطلبات (يرجى إدخال الرقم بصيغة دولية بدون أي رموز مثل + أو مسافات)
-        // مثال: لو الرقم في مصر 01001234567، اكتبه 201001234567
-        let whatsappPhoneNumber = '201012213289'; // يمكنك تغيير هذا الرقم في أي وقت
+        // مثال: لو الرقم في السعودية 0501234567، اكتبه 966501234567
+        let whatsappPhoneNumber = '966501234567'; // يمكنك تغيير هذا الرقم في أي وقت
 
         // قائمة المنتجات (يمكنك إضافة أو تعديل المنتجات هنا)
         const products = [
             {
                 id: 1,
                 name: 'هاتف ذكي X',
-                price: 1000.50,
-                image: 'https://i5.walmartimages.com/seo/Pre-Owned-Apple-iPhone-X-256GB-Factory-Unlocked-Smartphone-Refurbished-Good_9b5ec8b2-9665-463b-adc5-64829ba72da6.1b496e5a8fcee76fdad69bae12b54745.jpeg', // Placeholder image
+                price: 5999.99,
+                image: 'https://images.samsung.com/is/image/samsung/p6pim/levant/2302/gallery/levant-galaxy-s23-s918-sm-s918bzggmea-535359702?$472_472_AC_RGB$', // مثال لرابط صورة احترافي
                 description: 'هاتف ذكي متطور بميزات رائعة وأداء قوي.'
             },
             {
                 id: 2,
-                name:'عبايا ',
+                name: 'سماعات بلوتوث',
                 price: 499.50,
-                image: 'https://www.jollychic.shop/media/catalog/product/cache/7fe992b537a0ee7a7b53f74b3383765b/6/8/688b7b5bbe696061cad0e164c429b905.webp', // Placeholder image
+                image: 'https://placehold.co/400x300/065f46/ffffff?text=سماعات', // Placeholder image
                 description: 'سماعات لاسلكية عالية الجودة لتجربة صوت ممتازة.'
             },
             {
@@ -178,7 +182,7 @@
                             <h3 class="text-xl font-bold text-gray-800 mb-2">${product.name}</h3>
                             <p class="text-gray-600 mb-4 text-sm">${product.description}</p>
                             <div class="flex justify-between items-center">
-                                <span class="text-2xl font-bold text-blue-600">${product.price.toFixed(2)} جنيه مصري</span>
+                                <span class="text-2xl font-bold text-blue-600">${product.price.toFixed(2)} ريال سعودي</span>
                                 <button onclick="addToCart(${product.id})" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 transform hover:scale-105">
                                     أضف للسلة
                                 </button>
@@ -235,7 +239,7 @@
                                 <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md mr-4">
                                 <div>
                                     <h4 class="font-semibold text-lg text-gray-800">${item.name}</h4>
-                                    <p class="text-gray-600">${item.price.toFixed(2)} جنيه مصري</p>
+                                    <p class="text-gray-600">${item.price.toFixed(2)} ريال سعودي</p>
                                 </div>
                             </div>
                             <div class="flex items-center space-x-2 space-x-reverse">
@@ -248,13 +252,14 @@
                     cartItemsContainer.innerHTML += cartItemDiv;
                 });
             }
-            cartTotalSpan.textContent = `${total.toFixed(2)} جنيه مصري`;
+            cartTotalSpan.textContent = `${total.toFixed(2)} ريال سعودي`;
         }
 
         // --- 4. وظيفة إتمام الطلب عبر واتساب ---
         function placeOrder() {
             if (cart.length === 0) {
-                alert("سلة التسوق فارغة، يرجى إضافة منتجات قبل إتمام الطلب."); // Use a custom modal in a real app
+                // يمكنك استخدام مودال مخصص بدلاً من alert في تطبيق حقيقي
+                alert("سلة التسوق فارغة، يرجى إضافة منتجات قبل إتمام الطلب."); 
                 return;
             }
 
@@ -262,11 +267,11 @@
             let total = 0;
 
             cart.forEach(item => {
-                orderDetails += `- ${item.name} (الكمية: ${item.quantity}) - سعر الوحدة: ${item.price.toFixed(2)} جنيه مصري\n`;
+                orderDetails += `- ${item.name} (الكمية: ${item.quantity}) - سعر الوحدة: ${item.price.toFixed(2)} ريال سعودي\n`;
                 total += item.price * item.quantity;
             });
 
-            orderDetails += `\nالإجمالي الكلي: ${total.toFixed(2)} جنيه مصري\n`;
+            orderDetails += `\nالإجمالي الكلي: ${total.toFixed(2)} ريال سعودي\n`;
             orderDetails += "الرجاء تأكيد الطلب.";
 
             // ترميز الرسالة لعنوان URL
