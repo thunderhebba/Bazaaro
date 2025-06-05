@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bazaaro</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        .product-card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        /* Custom scrollbar for better appearance */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <header class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <h1 class="text-4xl font-extrabold mb-4 md:mb-0">متجر المنتجات</h1>
+            <nav>
+                <ul class="flex space-x-6 space-x-reverse text-lg font-medium">
+                    <li><a href="#products-section" class="hover:text-blue-200 transition duration-300">المنتجات</a></li>
+                    <li><a href="#cart-section" class="hover:text-blue-200 transition duration-300">سلة التسوق</a></li>
+                    <li><a href="#" id="whatsapp-info-btn" class="hover:text-blue-200 transition duration-300">معلومات الواتساب</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-6 flex-grow">
+        <!-- Products Section -->
+        <section id="products-section" class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center border-b-2 border-blue-500 pb-2">منتجاتنا</h2>
+            <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Products will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Cart Section -->
+        <section id="cart-section" class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center border-b-2 border-blue-500 pb-2">سلة التسوق</h2>
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div id="cart-items" class="mb-4">
+                    <!-- Cart items will be loaded here by JavaScript -->
+                    <p id="empty-cart-message" class="text-gray-600 text-center text-lg">سلة التسوق فارغة.</p>
+                </div>
+                <div class="flex justify-between items-center text-2xl font-bold text-gray-900 border-t pt-4">
+                    <span>الإجمالي:</span>
+                    <span id="cart-total">0.00 جنيه مصري</span>
+                </div>
+                <button id="place-order-btn" class="mt-8 w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg text-xl transition duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    إتمام الطلب عبر واتساب
+                </button>
+            </div>
+        </section>
+
+        <!-- WhatsApp Info Modal (Hidden by default) -->
+        <div id="whatsapp-info-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full relative">
+                <h3 class="text-2xl font-bold mb-4 text-center text-gray-800">معلومات الواتساب</h3>
+                <p class="text-gray-700 text-lg text-center mb-6">
+                    يمكنك تغيير رقم الواتساب الذي يتم إرسال الطلبات إليه عن طريق تعديل قيمة المتغير 
+                    <code class="bg-gray-200 p-1 rounded font-mono text-sm">whatsappPhoneNumber</code> 
+                    في قسم <code class="bg-gray-200 p-1 rounded font-mono text-sm">JavaScript</code> بالأسفل.
+                </p>
+                <div class="text-center">
+                    <button id="close-whatsapp-info-modal" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+                        فهمت
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white p-6 text-center mt-auto shadow-inner">
+        <p>&copy; 2023 متجر المنتجات. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script>
+        // --- 1. إعدادات المتجر (يمكنك تعديلها هنا) ---
+
+        // رقم الواتساب الذي ستصله الطلبات (يرجى إدخال الرقم بصيغة دولية بدون أي رموز مثل + أو مسافات)
+        // مثال: لو الرقم في مصر 01001234567، اكتبه 201001234567
+        let whatsappPhoneNumber = '201012213289'; // يمكنك تغيير هذا الرقم في أي وقت
+
+        // قائمة المنتجات (يمكنك إضافة أو تعديل المنتجات هنا)
+        const products = [
+            {
+                id: 1,
+                name: 'هاتف ذكي X',
+                price: 5999.99,
+                image: 'https://i5.walmartimages.com/seo/Pre-Owned-Apple-iPhone-X-256GB-Factory-Unlocked-Smartphone-Refurbished-Good_9b5ec8b2-9665-463b-adc5-64829ba72da6.1b496e5a8fcee76fdad69bae12b54745.jpeg', // Placeholder image
+                description: 'هاتف ذكي متطور بميزات رائعة وأداء قوي.'
+            },
+            {
+                id: 2,
+                name:'عبايا ',
+                price: 499.50,
+                image: 'https://www.jollychic.shop/media/catalog/product/cache/7fe992b537a0ee7a7b53f74b3383765b/6/8/688b7b5bbe696061cad0e164c429b905.webp', // Placeholder image
+                description: 'سماعات لاسلكية عالية الجودة لتجربة صوت ممتازة.'
+            },
+            {
+                id: 3,
+                name: 'ساعة ذكية',
+                price: 1200.00,
+                image: 'https://placehold.co/400x300/9a3412/ffffff?text=ساعة+ذكية', // Placeholder image
+                description: 'ساعة ذكية أنيقة بتصميم عصري وميزات تتبع اللياقة البدنية.'
+            },
+            {
+                id: 4,
+                name: 'جهاز لوحي',
+                price: 2500.75,
+                image: 'https://placehold.co/400x300/6b21a8/ffffff?text=جهاز+لوحي', // Placeholder image
+                description: 'جهاز لوحي خفيف الوزن ومثالي للعمل والترفيه.'
+            },
+            {
+                id: 5,
+                name: 'كاميرا رقمية',
+                price: 3500.00,
+                image: 'https://placehold.co/400x300/be123c/ffffff?text=كاميرا', // Placeholder image
+                description: 'كاميرا رقمية احترافية لصور وفيديوهات بجودة عالية.'
+            },
+            {
+                id: 6,
+                name: 'شاحن محمول',
+                price: 150.00,
+                image: 'https://placehold.co/400x300/0f766e/ffffff?text=شاحن', // Placeholder image
+                description: 'شاحن محمول قوي لشحن أجهزتك أثناء التنقل.'
+            },
+        ];
+
+        // سلة التسوق (لا تعدلها هنا، سيتم إدارتها بواسطة الكود)
+        let cart = [];
+
+        // --- 2. جلب عناصر HTML ---
+        const productsContainer = document.getElementById('products-container');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartTotalSpan = document.getElementById('cart-total');
+        const placeOrderBtn = document.getElementById('place-order-btn');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+        const whatsappInfoBtn = document.getElementById('whatsapp-info-btn');
+        const whatsappInfoModal = document.getElementById('whatsapp-info-modal');
+        const closeWhatsappInfoModalBtn = document.getElementById('close-whatsapp-info-modal');
+
+        // --- 3. وظائف عرض المنتجات وسلة التسوق ---
+
+        // وظيفة لعرض المنتجات
+        function displayProducts() {
+            productsContainer.innerHTML = ''; // تفريغ المنتجات الحالية
+            products.forEach(product => {
+                const productCard = `
+                    <div class="product-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">${product.name}</h3>
+                            <p class="text-gray-600 mb-4 text-sm">${product.description}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-blue-600">${product.price.toFixed(2)} جنيه مصري</span>
+                                <button onclick="addToCart(${product.id})" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 transform hover:scale-105">
+                                    أضف للسلة
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                productsContainer.innerHTML += productCard;
+            });
+        }
+
+        // وظيفة لإضافة منتج إلى السلة
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                const existingCartItem = cart.find(item => item.id === productId);
+                if (existingCartItem) {
+                    existingCartItem.quantity++;
+                } else {
+                    cart.push({ ...product, quantity: 1 });
+                }
+                updateCartDisplay();
+            }
+        }
+
+        // وظيفة لتغيير كمية منتج في السلة
+        function changeQuantity(productId, change) {
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            if (itemIndex > -1) {
+                cart[itemIndex].quantity += change;
+                if (cart[itemIndex].quantity <= 0) {
+                    cart.splice(itemIndex, 1); // إزالة المنتج إذا أصبحت الكمية صفر أو أقل
+                }
+                updateCartDisplay();
+            }
+        }
+
+        // وظيفة لتحديث عرض سلة التسوق والإجمالي
+        function updateCartDisplay() {
+            cartItemsContainer.innerHTML = ''; // تفريغ عناصر السلة الحالية
+            let total = 0;
+
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden'); // إظهار رسالة السلة فارغة
+                placeOrderBtn.disabled = true; // تعطيل زر إتمام الطلب
+            } else {
+                emptyCartMessage.classList.add('hidden'); // إخفاء رسالة السلة فارغة
+                placeOrderBtn.disabled = false; // تفعيل زر إتمام الطلب
+                cart.forEach(item => {
+                    total += item.price * item.quantity;
+                    const cartItemDiv = `
+                        <div class="flex items-center justify-between p-4 border-b last:border-b-0">
+                            <div class="flex items-center">
+                                <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md mr-4">
+                                <div>
+                                    <h4 class="font-semibold text-lg text-gray-800">${item.name}</h4>
+                                    <p class="text-gray-600">${item.price.toFixed(2)} جنيه مصري</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2 space-x-reverse">
+                                <button onclick="changeQuantity(${item.id}, -1)" class="bg-red-200 text-red-700 font-bold w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-300 transition duration-200">-</button>
+                                <span class="text-xl font-medium text-gray-900">${item.quantity}</span>
+                                <button onclick="changeQuantity(${item.id}, 1)" class="bg-green-200 text-green-700 font-bold w-8 h-8 rounded-full flex items-center justify-center hover:bg-green-300 transition duration-200">+</button>
+                            </div>
+                        </div>
+                    `;
+                    cartItemsContainer.innerHTML += cartItemDiv;
+                });
+            }
+            cartTotalSpan.textContent = `${total.toFixed(2)} جنيه مصري`;
+        }
+
+        // --- 4. وظيفة إتمام الطلب عبر واتساب ---
+        function placeOrder() {
+            if (cart.length === 0) {
+                alert("سلة التسوق فارغة، يرجى إضافة منتجات قبل إتمام الطلب."); // Use a custom modal in a real app
+                return;
+            }
+
+            let orderDetails = "أهلاً، أود طلب المنتجات التالية:\n\n";
+            let total = 0;
+
+            cart.forEach(item => {
+                orderDetails += `- ${item.name} (الكمية: ${item.quantity}) - سعر الوحدة: ${item.price.toFixed(2)} جنيه مصري\n`;
+                total += item.price * item.quantity;
+            });
+
+            orderDetails += `\nالإجمالي الكلي: ${total.toFixed(2)} جنيه مصري\n`;
+            orderDetails += "الرجاء تأكيد الطلب.";
+
+            // ترميز الرسالة لعنوان URL
+            const encodedMessage = encodeURIComponent(orderDetails);
+            const whatsappUrl = `https://wa.me/${whatsappPhoneNumber}?text=${encodedMessage}`;
+
+            // فتح رابط الواتساب
+            window.open(whatsappUrl, '_blank');
+
+            // يمكنك هنا إضافة منطق لمسح السلة بعد الطلب إذا أردت
+            // cart = [];
+            // updateCartDisplay();
+        }
+
+        // --- 5. وظائف إدارة المودال (النافذة المنبثقة) ---
+        whatsappInfoBtn.addEventListener('click', () => {
+            whatsappInfoModal.classList.remove('hidden');
+        });
+
+        closeWhatsappInfoModalBtn.addEventListener('click', () => {
+            whatsappInfoModal.classList.add('hidden');
+        });
+
+        // إغلاق المودال عند النقر خارجها
+        whatsappInfoModal.addEventListener('click', (event) => {
+            if (event.target === whatsappInfoModal) {
+                whatsappInfoModal.classList.add('hidden');
+            }
+        });
+
+        // --- 6. تشغيل التطبيق عند تحميل الصفحة ---
+        document.addEventListener('DOMContentLoaded', () => {
+            displayProducts(); // عرض المنتجات عند تحميل الصفحة
+            updateCartDisplay(); // تحديث عرض السلة (ستكون فارغة في البداية)
+            placeOrderBtn.addEventListener('click', placeOrder); // ربط زر إتمام الطلب بالوظيفة
+        });
+    </script>
+</body>
+</html>
